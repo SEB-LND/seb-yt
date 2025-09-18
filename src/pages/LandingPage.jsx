@@ -6,7 +6,7 @@ import { columnBreakpoints } from "../components/Videos/columnBreakpoints";
 import { useIsMobileView } from "../utils/utils";
 import { GridItem } from "../components/Videos/GridItem";
 import { useAtom } from "jotai";
-import { userSettingToShowFullSidebarAtom } from "../store";
+import { userSettingToShowFullSidebarAtom, searchTermAtom } from "../store";
 import { landingPageVideosForTesting } from "../utils/videos";
 import channels from "../components/ChipsBar/chipsArray";
 import {
@@ -25,6 +25,7 @@ import {
   SHOW_FULL_SIDEBAR_BREAKPOINT,
   FULL_SIDEBAR_WIDTH,
 } from "../utils/utils";
+
 function shuffleArray(array) {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -38,7 +39,7 @@ const Videos = ({ selectedChipIndex }) => {
   const VIDEOS_PER_QUERY = 24;
   const isMobileView = useIsMobileView();
   const [userSettingToShowFullSidebar] = useAtom(userSettingToShowFullSidebarAtom);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useAtom(searchTermAtom); // Use global search term from header
   const [filteredVideos, setFilteredVideos] = useState([]);
 
   const selectedChannel = channels[selectedChipIndex].channelTitle;
@@ -72,12 +73,6 @@ const Videos = ({ selectedChipIndex }) => {
     <OuterVideoContainer showFullSidebar={userSettingToShowFullSidebar}>
       <ThemeProvider theme={columnBreakpoints}>
         <InnerVideoContainer>
-          <SearchInput 
-            type="text" 
-            placeholder="Search videos..." 
-            value={searchTerm} 
-            onChange={(e) => setSearchTerm(e.target.value)} 
-          />
           <Grid container spacing={isMobileView ? 0 : 1}>
             {filteredVideos.map((video) => (
               <GridItem key={video.id} video={video} />
@@ -115,7 +110,7 @@ const InnerVideoContainer = styled.div`
   margin: 0;
   @media screen and (min-width: ${TWO_COL_MIN_WIDTH}px) {
     max-width: ${TWO_COL_MAX_WIDTH}px;
-    margin-top: 24px;
+    margin-top: 64px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -136,15 +131,6 @@ const InnerVideoContainer = styled.div`
   @media screen and (min-width: ${SIX_COL_MIN_WIDTH}px) {
     max-width: ${SIX_COL_MAX_WIDTH}px;
   }
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
 `;
 
 export default Videos;

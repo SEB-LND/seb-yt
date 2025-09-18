@@ -24,7 +24,7 @@ function Header() {
         <StyledAppBar elevation={isMobileView ? 2 : 0}>
           <StyledToolbar disableGutters>
             <LeftContainer />
-            {/* <MiddleContainer /> */}
+            <MiddleContainer />
             {/* <RightContainer /> */} 
             {/* top right settings and profile here */}
           </StyledToolbar>
