@@ -46,7 +46,7 @@ const VideoCard = (vid) => {
 
       <StyledCardHeader
         // avatar={<StyledAvatar src={sampleVideo.channelAvatarUrl} />}
-        action={<MoreButton />}
+        action={<MoreButton video={sampleVideo} isSearchPage={false}/>}
         title={<VideoTitle variant="h3">{he.decode(sampleVideo.title)}</VideoTitle>}
         subheader={
           <ChannelDetails

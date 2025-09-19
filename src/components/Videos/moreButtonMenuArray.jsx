@@ -7,7 +7,7 @@ import FlagOutlinedIcon from '@material-ui/icons/FlagOutlined'
 
 export const moreButtonMenuArray = [
   // { Icon: PlaylistPlayIcon, text: 'Add to queue' },
-  { Icon: QueryBuilderIcon, text: 'Save to Watch Later' },
+  { Icon: QueryBuilderIcon, text: 'Save to Watch Later', action: 'saveToWatchLater',},
   // { Icon: PlaylistAddIcon, text: 'Save to playlist' },
   // { Icon: BlockIcon, text: 'Not interested' },
   // { Icon: RemoveCircleOutlineIcon, text: "Don't recommend channel" },

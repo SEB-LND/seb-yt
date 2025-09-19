@@ -4,16 +4,17 @@ import {
   MenuList,
   Paper,
   Popper,
-  Divider,
+  MenuItem,
 } from '@material-ui/core'
-import { PopperMenuTop } from './PopperMenuTop'
-import { PopperMenuBottom } from './PopperMenuBottom'
+import { moreButtonMenuArray } from './moreButtonMenuArray'
 
 export const DesktopPopper = ({
   isPopupOpen,
   anchorRef,
   handlePopupClose,
   handleListKeyDown,
+  onMenuClick,
+  menuArray = [],
 }) => {
   return (
     <Popper
@@ -29,9 +30,12 @@ export const DesktopPopper = ({
             autoFocusItem={isPopupOpen}
             onKeyDown={handleListKeyDown}
           >
-            <PopperMenuTop onClick={handlePopupClose} />
-            {/* <Divider style={{ margin: '6px 0' }} /> */}
-            <PopperMenuBottom onClick={handlePopupClose} />
+            {menuArray.map(({ Icon, text }) => (
+              <MenuItem key={text} onClick={() => onMenuClick(text)}>
+                {Icon && <Icon style={{ marginRight: 8 }} />}
+                {text}
+              </MenuItem>
+            ))}
           </MenuList>
         </ClickAwayListener>
       </Paper>

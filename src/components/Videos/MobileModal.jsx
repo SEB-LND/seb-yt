@@ -8,6 +8,8 @@ export const MobileModal = ({
   handleModalClose,
   isSearchPage,
   isMobileHeaderMoreButton,
+  menuArray = [],
+  onMenuClick,
 }) => {
   // Only 'Save to Watch Later', 'Cancel' on search page modal
   const MenuToLoop = isMobileHeaderMoreButton
@@ -16,18 +18,23 @@ export const MobileModal = ({
     ? MobileModalMenu.slice(1)
     : MobileModalMenu
 
+  // 🔑 local click handler
+  const handleClick = (item) => {
+    if (onMenuClick) {
+      onMenuClick(item) // e.g. "Save to Watch Later"
+    }
+    handleModalClose()
+  }
+  
   return (
     <Modal open={isModalOpen} onClose={handleModalClose}>
       <ModalContainer>
         <List style={{ padding: '3px 0' }}>
-          {MenuToLoop.map((item) => {
-            return (
-              <StyledListItem key={item} onClick={handleModalClose}>
-                {/* add a <ListItemText /> here renders nothing for unknown reason  */}
-                <Typography variant="body1">{item}</Typography>
-              </StyledListItem>
-            )
-          })}
+          {menuArray.map((item) => (
+            <StyledListItem key={item.text || item} onClick={() => handleClick(item.text || item)}>
+              <Typography variant="body1">{item.text || item}</Typography>
+            </StyledListItem>
+          ))}
         </List>
       </ModalContainer>
     </Modal>

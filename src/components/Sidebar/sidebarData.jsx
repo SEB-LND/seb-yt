@@ -26,13 +26,13 @@ export const sideBarShowLess = [
 ]
 
 export const sideBarMenuRows = [
-  { Icon: HomeIcon, text: 'Home' },
+  { Icon: HomeIcon, text: 'Home', path: '/' },
   // { Icon: ExploreOutlinedIcon, text: 'Explore' },
   // { Icon: SubscriptionsOutlinedIcon, text: 'Subscriptions' },
   // { Icon: VideoLibraryOutlinedIcon, text: 'Library' },
   // { Icon: HistoryOutlinedIcon, text: 'History' },
   // { Icon: ShopOutlinedIcon, text: 'Your videos' },
-  { Icon: QueryBuilderOutlinedIcon, text: 'Watch later' },
+  { Icon: QueryBuilderOutlinedIcon, text: 'Watch later',path: '/watch-later' },
   // { Icon: PlaylistPlayOutlinedIcon, text: 'Music' },
 ]
 

@@ -1,12 +1,28 @@
 import React, { useState, useRef } from 'react'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
+import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
 import { StyledIconButton } from './VideoCard'
 import { useIsMobileView } from '../../utils/utils'
 import { MobileModal } from './MobileModal'
 import { DesktopPopper } from './DesktopPopper'
+import { useAtom } from 'jotai'
+import { watchLaterAtom } from '../../store'
 
-export const MoreButton = ({ isSearchPage }) => {
+export const MoreButton = ({ isSearchPage, video }) => {
   const isMobileView = useIsMobileView()
+  const [watchLater, setWatchLater] = useAtom(watchLaterAtom)
+  
+  const isInWatchLater = watchLater.some(v => v.id === video?.id);
+  // generate dynamic menu based on watch later status
+  const dynamicMenuArray = [
+    {
+      text: isInWatchLater ? 'Remove from Watch Later' : 'Save to Watch Later',
+      Icon: isInWatchLater ? DeleteOutlineIcon : QueryBuilderIcon,
+      action: 'toggleWatchLater',
+    },
+  ]
+
   // states for Modal in mobile view
   const [isModalOpen, setIsModalOpen] = useState(false)
   const handleModalClose = () => setIsModalOpen(false)
@@ -29,6 +45,19 @@ export const MoreButton = ({ isSearchPage }) => {
     }
   }
 
+  // 🔑 toggle Watch Later
+  const handleMenuClick = (item) => {
+    if ((item === 'Save to Watch Later' || item === 'Remove from Watch Later') && video?.id) {
+      setWatchLater(prev => {
+        const exists = prev.some(v => v.id === video.id);
+        if (exists) return prev.filter(v => v.id !== video.id);
+        return [...prev, video];
+      });
+    }
+    setIsPopupOpen(false);
+    setIsModalOpen(false);
+  };
+
   // what is triggered onClick depends on the view
   const handleMoreIconClick = () => {
     if (isMobileView) {
@@ -47,13 +76,19 @@ export const MoreButton = ({ isSearchPage }) => {
         style={{ color: 'rgb(144, 144, 144)' }}
       />
 
-      {/* desktop view popper */}
+      {/* desktop popper */}
       <DesktopPopper
         {...{ isPopupOpen, anchorRef, handlePopupClose, handleListKeyDown }}
+        onMenuClick={handleMenuClick}
+        menuArray={dynamicMenuArray}
       />
 
-      {/* mobile view modal */}
-      <MobileModal {...{ isModalOpen, handleModalClose, isSearchPage }} />
+      {/* mobile modal */}
+      <MobileModal
+        {...{ isModalOpen, handleModalClose, isSearchPage }}
+        onMenuClick={handleMenuClick}
+        menuArray={dynamicMenuArray}
+      />
     </StyledIconButton>
   )
 }
