@@ -20,6 +20,13 @@ export const moreButtonMenuArray = [
     altText: 'Remove from Watch Later',
     defaultIcon: QueryBuilderIcon,
   },
+  {
+    action: 'toggleLiked',
+    defaultText: 'Like',
+    altText: 'Remove from Liked Videos',
+    defaultIcon: ThumbUpAltOutlinedIcon,
+  },
+
   // { Icon: BlockIcon, text: 'Not interested' },
   // { Icon: RemoveCircleOutlineIcon, text: "Don't recommend channel" },
   // { Icon: FlagOutlinedIcon, text: 'Report' },

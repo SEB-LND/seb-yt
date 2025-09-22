@@ -6,6 +6,7 @@ import HistoryOutlinedIcon from '@material-ui/icons/HistoryOutlined'
 import ShopOutlinedIcon from '@material-ui/icons/ShopOutlined'
 import PlaylistPlayOutlinedIcon from '@material-ui/icons/PlaylistPlayOutlined'
 import QueryBuilderOutlinedIcon from '@material-ui/icons/QueryBuilderOutlined'
+import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined'
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined'
 import YouTubeIcon from '@material-ui/icons/YouTube'
 import VideogameAssetOutlinedIcon from '@material-ui/icons/VideogameAssetOutlined'
@@ -33,6 +34,7 @@ export const sideBarMenuRows = [
   // { Icon: ShopOutlinedIcon, text: 'Your videos' },
   { Icon: PlaylistPlayOutlinedIcon, text: 'Playlists', path: '/playlist' },
   { Icon: QueryBuilderOutlinedIcon, text: 'Watch Later', path: '/watch-later' },
+  { Icon: ThumbUpAltOutlinedIcon, text: 'Liked Videos', path: '/liked-videos' },
 ]
 
 export const moreFromYouTubeRows = [
