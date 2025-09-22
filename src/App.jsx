@@ -3,9 +3,10 @@ import Header from './components/Header/Header.jsx'
 import MobileFooter from './components/Footer/Footer'
 import Main from './components/Main/Main.jsx'
 import { useIsMobileView } from './utils/utils'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom' // ✅ Switch not Routes
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import './App.css'
-import WatchLaterPage from './pages/WatchLaterPage' // make sure this file exists
+import PlaylistPage from './pages/PlaylistPage'
+import WatchLaterPage from './pages/WatchLaterPage' 
 
 function App() {
   const isMobileView = useIsMobileView()
@@ -16,6 +17,7 @@ function App() {
         <Header />
         <Switch>
           <Route exact path="/" component={Main} />
+          <Route path="/playlist" component={PlaylistPage}/>
           <Route path="/watch-later" component={WatchLaterPage} />
         </Switch>
         {isMobileView && <MobileFooter />}

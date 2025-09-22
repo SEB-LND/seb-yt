@@ -8,4 +8,5 @@ export const userSettingToShowFullSidebarAtom = atom(true)
 
 export const searchTermAtom = atom('')
 export const searchResultsAtom = atom(null)
+export const playlistAtom = atomWithStorage('playlist', [])
 export const watchLaterAtom = atomWithStorage('watchLater', [])

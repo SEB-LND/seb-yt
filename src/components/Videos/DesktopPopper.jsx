@@ -6,7 +6,6 @@ import {
   Popper,
   MenuItem,
 } from '@material-ui/core'
-import { moreButtonMenuArray } from './moreButtonMenuArray'
 
 export const DesktopPopper = ({
   isPopupOpen,
@@ -30,10 +29,10 @@ export const DesktopPopper = ({
             autoFocusItem={isPopupOpen}
             onKeyDown={handleListKeyDown}
           >
-            {menuArray.map(({ Icon, text }) => (
-              <MenuItem key={text} onClick={() => onMenuClick(text)}>
-                {Icon && <Icon style={{ marginRight: 8 }} />}
-                {text}
+            {menuArray.map((item) => (
+              <MenuItem key={item.action} onClick={() => onMenuClick(item)}>
+                {item.Icon && <item.Icon style={{ marginRight: 8 }} />}
+                {item.text}
               </MenuItem>
             ))}
           </MenuList>

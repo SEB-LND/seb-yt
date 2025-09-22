@@ -11,14 +11,7 @@ export const MobileModal = ({
   menuArray = [],
   onMenuClick,
 }) => {
-  // Only 'Save to Watch Later', 'Cancel' on search page modal
-  const MenuToLoop = isMobileHeaderMoreButton
-    ? MobileHeaderModalMenu
-    : isSearchPage
-    ? MobileModalMenu.slice(1)
-    : MobileModalMenu
-
-  // 🔑 local click handler
+  // local click handler
   const handleClick = (item) => {
     if (onMenuClick) {
       onMenuClick(item) // e.g. "Save to Watch Later"
@@ -31,8 +24,9 @@ export const MobileModal = ({
       <ModalContainer>
         <List style={{ padding: '3px 0' }}>
           {menuArray.map((item) => (
-            <StyledListItem key={item.text || item} onClick={() => handleClick(item.text || item)}>
-              <Typography variant="body1">{item.text || item}</Typography>
+            <StyledListItem key={item.action} onClick={() => handleClick(item)}>
+              {item.Icon && <item.Icon style={{ marginRight: 8 }} />}
+              <Typography variant="body1">{item.text}</Typography>
             </StyledListItem>
           ))}
         </List>
@@ -57,12 +51,3 @@ const ModalContainer = styled.div`
   max-height: 100%;
   background-color: rgb(249, 249, 249);
 `
-const MobileModalMenu = ['Not interested', 'Save to Watch Later', 'Cancel']
-
-const MobileHeaderModalMenu = [
-  'Settings',
-  'Your data in YouTube',
-  'Feedback',
-  'Help',
-  'Cancel',
-]

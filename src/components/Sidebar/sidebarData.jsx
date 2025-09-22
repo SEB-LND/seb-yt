@@ -4,8 +4,8 @@ import SubscriptionsOutlinedIcon from '@material-ui/icons/SubscriptionsOutlined'
 import VideoLibraryOutlinedIcon from '@material-ui/icons/VideoLibraryOutlined'
 import HistoryOutlinedIcon from '@material-ui/icons/HistoryOutlined'
 import ShopOutlinedIcon from '@material-ui/icons/ShopOutlined'
-import QueryBuilderOutlinedIcon from '@material-ui/icons/QueryBuilderOutlined'
 import PlaylistPlayOutlinedIcon from '@material-ui/icons/PlaylistPlayOutlined'
+import QueryBuilderOutlinedIcon from '@material-ui/icons/QueryBuilderOutlined'
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined'
 import YouTubeIcon from '@material-ui/icons/YouTube'
 import VideogameAssetOutlinedIcon from '@material-ui/icons/VideogameAssetOutlined'
@@ -30,10 +30,9 @@ export const sideBarMenuRows = [
   // { Icon: ExploreOutlinedIcon, text: 'Explore' },
   // { Icon: SubscriptionsOutlinedIcon, text: 'Subscriptions' },
   // { Icon: VideoLibraryOutlinedIcon, text: 'Library' },
-  // { Icon: HistoryOutlinedIcon, text: 'History' },
   // { Icon: ShopOutlinedIcon, text: 'Your videos' },
-  { Icon: QueryBuilderOutlinedIcon, text: 'Watch later',path: '/watch-later' },
-  // { Icon: PlaylistPlayOutlinedIcon, text: 'Music' },
+  { Icon: PlaylistPlayOutlinedIcon, text: 'Playlists', path: '/playlist' },
+  { Icon: QueryBuilderOutlinedIcon, text: 'Watch Later', path: '/watch-later' },
 ]
 
 export const moreFromYouTubeRows = [

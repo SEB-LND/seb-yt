@@ -1,27 +1,41 @@
 import React, { useState, useRef } from 'react'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
-import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
 import { StyledIconButton } from './VideoCard'
 import { useIsMobileView } from '../../utils/utils'
 import { MobileModal } from './MobileModal'
 import { DesktopPopper } from './DesktopPopper'
 import { useAtom } from 'jotai'
+import { moreButtonMenuArray } from './moreButtonMenuArray'
+import { playlistAtom } from '../../store'
 import { watchLaterAtom } from '../../store'
 
 export const MoreButton = ({ isSearchPage, video }) => {
   const isMobileView = useIsMobileView()
+  const [playlist, setPlaylist] = useAtom(playlistAtom)
   const [watchLater, setWatchLater] = useAtom(watchLaterAtom)
   
-  const isInWatchLater = watchLater.some(v => v.id === video?.id);
-  // generate dynamic menu based on watch later status
-  const dynamicMenuArray = [
-    {
-      text: isInWatchLater ? 'Remove from Watch Later' : 'Save to Watch Later',
-      Icon: isInWatchLater ? DeleteOutlineIcon : QueryBuilderIcon,
-      action: 'toggleWatchLater',
-    },
-  ]
+  const isInPlaylist = playlist.some(v => v.id === video?.id)
+  const isInWatchLater = watchLater.some(v => v.id === video?.id)
+
+  // build dynamic menu from base config
+  const dynamicMenuArray = moreButtonMenuArray.map((item) => {
+    if (item.action === 'togglePlaylist') {
+      return {
+        ...item,
+        text: isInPlaylist ? item.altText : item.defaultText,
+        Icon: isInPlaylist ? DeleteOutlineIcon : item.defaultIcon,
+      }
+    }
+    if (item.action === 'toggleWatchLater') {
+      return {
+        ...item,
+        text: isInWatchLater ? item.altText : item.defaultText,
+        Icon: isInWatchLater ? DeleteOutlineIcon : item.defaultIcon,
+      }
+    }
+    return item
+  })
 
   // states for Modal in mobile view
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -45,18 +59,25 @@ export const MoreButton = ({ isSearchPage, video }) => {
     }
   }
 
-  // 🔑 toggle Watch Later
+  // toggle actions
   const handleMenuClick = (item) => {
-    if ((item === 'Save to Watch Later' || item === 'Remove from Watch Later') && video?.id) {
-      setWatchLater(prev => {
-        const exists = prev.some(v => v.id === video.id);
-        if (exists) return prev.filter(v => v.id !== video.id);
-        return [...prev, video];
-      });
+    if (item.action === 'togglePlaylist' && video?.id) {
+      setPlaylist(prev => {
+        const exists = prev.some(v => v.id === video.id)
+        return exists ? prev.filter(v => v.id !== video.id) : [...prev, video]
+      })
     }
-    setIsPopupOpen(false);
-    setIsModalOpen(false);
-  };
+
+    if (item.action === 'toggleWatchLater' && video?.id) {
+      setWatchLater(prev => {
+        const exists = prev.some(v => v.id === video.id)
+        return exists ? prev.filter(v => v.id !== video.id) : [...prev, video]
+      })
+    }
+
+    setIsPopupOpen(false)
+    setIsModalOpen(false)
+  }
 
   // what is triggered onClick depends on the view
   const handleMoreIconClick = () => {
