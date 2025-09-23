@@ -35,6 +35,7 @@ const WatchLaterPage = () => {
     <OuterVideoContainer isSidebarOpen={isSidebarOpen} isMobileView={isMobileView}>
       <ThemeProvider theme={columnBreakpoints}>
         <InnerVideoContainer isSidebarOpen={isSidebarOpen} isMobileView={isMobileView}>
+          <PageTitle>Watch later</PageTitle>
           <Grid container spacing={isMobileView ? 0 : 1}>
             {filteredVideos.map((video) => (
               <GridItem key={video.id} video={video} />
@@ -48,18 +49,22 @@ const WatchLaterPage = () => {
 
 export default WatchLaterPage;
 
-// ================= Styled Components =================
-
 const OuterVideoContainer = styled.div`
   background-color: #f9f9f9;
   width: 100%;
-  padding-top: 16px;
+  padding-top: 8px;
 
   /* Push content right only if sidebar is open (desktop) */
   padding-left: ${({ isSidebarOpen, isMobileView }) =>
     isMobileView ? "0px" : isSidebarOpen ? `${FULL_SIDEBAR_WIDTH}px` : "0px"};
 
   transition: padding-left 0.3s ease;
+`;
+
+const PageTitle = styled.h2`
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 16px;
 `;
 
 const InnerVideoContainer = styled.div`

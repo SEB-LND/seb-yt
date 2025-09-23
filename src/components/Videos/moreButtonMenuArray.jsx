@@ -8,7 +8,7 @@ import FlagOutlinedIcon from '@material-ui/icons/FlagOutlined'
 
 export const moreButtonMenuArray = [
   // { Icon: PlaylistPlayIcon, text: 'Add to queue' },
-    {
+  {
     action: 'togglePlaylist',
     defaultText: 'Save to Playlist',
     altText: 'Remove from Playlist',

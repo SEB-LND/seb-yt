@@ -12,6 +12,8 @@ import {
 import he from 'he'
 import { ChannelDetails } from './ChannelDetails'
 import { MoreButton } from './MoreButton'
+import { useAtom } from 'jotai'
+import { historyAtom } from '../../store' 
 
 // const sampleVideo = {
 //   id: 'dQw4w9WgXcQ', // YouTube video ID
@@ -27,9 +29,17 @@ import { MoreButton } from './MoreButton'
 const VideoCard = (vid) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const sampleVideo = vid.video
+  const [, setHistory] = useAtom(historyAtom)
 
   const handleThumbnailClick = () => {
     setIsPlaying(true)
+
+   // Save video to history when played
+    setHistory((prev) => {
+      const alreadyInHistory = prev.some((v) => v.id === sampleVideo.id)
+      if (alreadyInHistory) return prev
+      return [...prev, sampleVideo]
+    })
   }
 
   return (

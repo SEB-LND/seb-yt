@@ -32,6 +32,7 @@ export const sideBarMenuRows = [
   // { Icon: SubscriptionsOutlinedIcon, text: 'Subscriptions' },
   // { Icon: VideoLibraryOutlinedIcon, text: 'Library' },
   // { Icon: ShopOutlinedIcon, text: 'Your videos' },
+  { Icon: HistoryOutlinedIcon, text: 'History', path: '/history' },
   { Icon: PlaylistPlayOutlinedIcon, text: 'Playlists', path: '/playlist' },
   { Icon: QueryBuilderOutlinedIcon, text: 'Watch Later', path: '/watch-later' },
   { Icon: ThumbUpAltOutlinedIcon, text: 'Liked Videos', path: '/liked-videos' },

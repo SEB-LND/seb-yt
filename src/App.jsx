@@ -5,6 +5,7 @@ import Main from './components/Main/Main.jsx'
 import { useIsMobileView } from './utils/utils'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import './App.css'
+import HistoryPage from './pages/HistoryPage'
 import PlaylistPage from './pages/PlaylistPage'
 import WatchLaterPage from './pages/WatchLaterPage' 
 import LikedVideosPage from './pages/LikedVideosPage' 
@@ -18,6 +19,7 @@ function App() {
         <Header />
         <Switch>
           <Route exact path="/" component={Main} />
+          <Route path="/history" component={HistoryPage} />
           <Route path="/playlist" component={PlaylistPage}/>
           <Route path="/watch-later" component={WatchLaterPage} />
           <Route path="/liked-videos" component={LikedVideosPage} />

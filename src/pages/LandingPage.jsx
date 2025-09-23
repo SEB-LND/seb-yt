@@ -97,11 +97,13 @@ const OuterVideoContainer = styled.div`
   /* 792px */
   @media screen and (min-width: ${SHOW_MINI_SIDEBAR_BREAKPOINT}px) {
     padding-left: ${MINI_SIDEBAR_WIDTH}px;
+    padding-right: 48px;
   }
 
   /* 1313px */
   @media screen and (min-width: ${SHOW_FULL_SIDEBAR_BREAKPOINT}px) {
     padding-left: ${({ showFullSidebar }) => (showFullSidebar ? FULL_SIDEBAR_WIDTH : MINI_SIDEBAR_WIDTH)}px;
+    padding-right: 48px;
   }
 `;
 
