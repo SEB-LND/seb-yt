@@ -1,6 +1,5 @@
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
-import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined'
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd'
 import BlockIcon from '@material-ui/icons/Block'
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline'
@@ -19,12 +18,6 @@ export const moreButtonMenuArray = [
     defaultText: 'Save to Watch Later',
     altText: 'Remove from Watch Later',
     defaultIcon: QueryBuilderIcon,
-  },
-  {
-    action: 'toggleLiked',
-    defaultText: 'Like',
-    altText: 'Remove from Liked Videos',
-    defaultIcon: ThumbUpAltOutlinedIcon,
   },
 
   // { Icon: BlockIcon, text: 'Not interested' },

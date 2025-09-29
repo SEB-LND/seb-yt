@@ -13,7 +13,9 @@ import he from 'he'
 import { ChannelDetails } from './ChannelDetails'
 import { MoreButton } from './MoreButton'
 import { useAtom } from 'jotai'
-import { historyAtom } from '../../store' 
+import { historyAtom, likedAtom } from '../../store' 
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt'
+import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined'
 
 // const sampleVideo = {
 //   id: 'dQw4w9WgXcQ', // YouTube video ID
@@ -30,6 +32,7 @@ const VideoCard = (vid) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const sampleVideo = vid.video
   const [, setHistory] = useAtom(historyAtom)
+  const [likedVideos, setLikedVideos] = useAtom(likedAtom)
 
   const handleThumbnailClick = () => {
     setIsPlaying(true)
@@ -40,6 +43,16 @@ const VideoCard = (vid) => {
       if (alreadyInHistory) return prev
       return [...prev, sampleVideo]
     })
+  }
+
+    // --- Like toggle ---
+  const isLiked = likedVideos.some((v) => v.id === sampleVideo.id)
+  const toggleLike = () => {
+    if (isLiked) {
+      setLikedVideos(likedVideos.filter((v) => v.id !== sampleVideo.id))
+    } else {
+      setLikedVideos([...likedVideos, sampleVideo])
+    }
   }
 
   return (
@@ -56,7 +69,14 @@ const VideoCard = (vid) => {
 
       <StyledCardHeader
         // avatar={<StyledAvatar src={sampleVideo.channelAvatarUrl} />}
-        action={<MoreButton video={sampleVideo} isSearchPage={false}/>}
+        action={
+          <ActionContainer>
+            <IconButton onClick={toggleLike}>
+              {isLiked ? <ThumbUpAltIcon style={{ color: 'red' }} /> : <ThumbUpAltOutlinedIcon />}
+            </IconButton>
+            <MoreButton video={sampleVideo} isSearchPage={false}/>
+          </ActionContainer>
+        }
         title={<VideoTitle variant="h3">{he.decode(sampleVideo.title)}</VideoTitle>}
         subheader={
           <ChannelDetails
@@ -69,6 +89,12 @@ const VideoCard = (vid) => {
     </StyledCard>
   )
 }
+
+const ActionContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`
 
 const Thumbnail = ({ thumbnailImage, formattedDuration, onClick }) => {
   return (

@@ -9,17 +9,14 @@ import { useAtom } from 'jotai'
 import { moreButtonMenuArray } from './moreButtonMenuArray'
 import { playlistAtom } from '../../store'
 import { watchLaterAtom } from '../../store'
-import { likedAtom } from '../../store'
 
 export const MoreButton = ({ isSearchPage, video }) => {
   const isMobileView = useIsMobileView()
   const [playlist, setPlaylist] = useAtom(playlistAtom)
   const [watchLater, setWatchLater] = useAtom(watchLaterAtom)
-  const [liked, setLiked] = useAtom(likedAtom)
   
   const isInPlaylist = playlist.some(v => v.id === video?.id)
   const isInWatchLater = watchLater.some(v => v.id === video?.id)
-  const isLiked = liked.some(v => v.id === video?.id)
 
   // build dynamic menu from base config
   const dynamicMenuArray = moreButtonMenuArray.map((item) => {
@@ -35,13 +32,6 @@ export const MoreButton = ({ isSearchPage, video }) => {
         ...item,
         text: isInWatchLater ? item.altText : item.defaultText,
         Icon: isInWatchLater ? DeleteOutlineIcon : item.defaultIcon,
-      }
-    }
-    if (item.action === 'toggleLiked') {
-      return {
-        ...item,
-        text: isLiked ? item.altText : item.defaultText,
-        Icon: isLiked ? DeleteOutlineIcon : item.defaultIcon,
       }
     }
     return item
@@ -80,13 +70,6 @@ export const MoreButton = ({ isSearchPage, video }) => {
 
     if (item.action === 'toggleWatchLater' && video?.id) {
       setWatchLater(prev => {
-        const exists = prev.some(v => v.id === video.id)
-        return exists ? prev.filter(v => v.id !== video.id) : [...prev, video]
-      })
-    }
-    
-    if (item.action === 'toggleLiked' && video?.id) {
-      setLiked(prev => {
         const exists = prev.some(v => v.id === video.id)
         return exists ? prev.filter(v => v.id !== video.id) : [...prev, video]
       })
