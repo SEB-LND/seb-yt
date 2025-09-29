@@ -7,7 +7,7 @@ import { useIsMobileView } from "../utils/utils";
 import { GridItem } from "../components/Videos/GridItem";
 import { useAtom } from "jotai";
 import { userSettingToShowFullSidebarAtom, searchTermAtom } from "../store";
-import { landingPageVideosForTesting } from "../utils/videos";
+import { supabase } from "../supabaseClient.ts";
 import channels from "../components/ChipsBar/chipsArray";
 import {
   TWO_COL_MIN_WIDTH,
@@ -45,7 +45,17 @@ const Videos = ({ selectedChipIndex }) => {
   const selectedChannel = channels[selectedChipIndex].channelTitle;
 
   useEffect(() => {
-    let filtered = landingPageVideosForTesting;
+    const fetchVideos = async () => {
+      let { data, error } = await supabase
+        .from("videos")
+        .select("*");
+
+      if (error) {
+        console.error("Error fetching videos:", error);
+        return;
+      }
+
+      let filtered = data || [];
 
     // Filter by channel if a specific channel is selected (not "All")
     if (selectedChannel !== "") {
@@ -67,6 +77,9 @@ const Videos = ({ selectedChipIndex }) => {
     // Shuffle and limit the results
     const shuffledAndLimited = shuffleArray(filtered).slice(0, VIDEOS_PER_QUERY);
     setFilteredVideos(shuffledAndLimited);
+  }; 
+
+    fetchVideos();
   }, [searchTerm, selectedChannel]);
 
   return (
