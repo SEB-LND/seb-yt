@@ -25,7 +25,7 @@ function Header() {
           <StyledToolbar disableGutters>
             <LeftContainer />
             <MiddleContainer />
-            {/* <RightContainer /> */} 
+            <RightContainer />
             {/* top right settings and profile here */}
           </StyledToolbar>
         </StyledAppBar>

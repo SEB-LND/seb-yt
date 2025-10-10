@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components/macro'
 import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia'
@@ -16,6 +16,7 @@ import { useAtom } from 'jotai'
 import { historyAtom, likedAtom } from '../../store' 
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt'
 import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined'
+import { supabase } from '../../supabaseClient.ts'
 
 // const sampleVideo = {
 //   id: 'dQw4w9WgXcQ', // YouTube video ID
@@ -33,6 +34,29 @@ const VideoCard = (vid) => {
   const sampleVideo = vid.video
   const [, setHistory] = useAtom(historyAtom)
   const [likedVideos, setLikedVideos] = useAtom(likedAtom)
+  const [viewCount, setViewCount] = useState(sampleVideo.viewCount || 0)
+
+  // Increment view count via Supabase RPC
+  const incrementViewCount = async () => {
+    try {
+      const { error } = await supabase.rpc('increment_view', {
+        video_id: Number(sampleVideo.id),
+      })
+      if (error) throw error
+
+      setViewCount((prev) => (prev || 0) + 1)
+      console.log('✅ View count incremented for video ID:', sampleVideo.id)
+    } catch (err) {
+      console.error('❌ Error incrementing view count:', err.message)
+    }
+  }
+
+  // Trigger increment when video starts playing
+  useEffect(() => {
+    if (isPlaying) {
+      incrementViewCount()
+    }
+  }, [isPlaying])
 
   const handleThumbnailClick = () => {
     setIsPlaying(true)

@@ -31,5 +31,38 @@ app.get("/api/videos", async (req, res) => {
   }
 });
 
+// POST API to add a new video to Supabase
+app.post("/api/videos", async (req, res) => {
+  try {
+    const {
+      title,
+      channelTitle,
+      thumbnailUrl,
+      duration,
+      embedUrl,
+    } = req.body;
+
+    const { data, error } = await supabase
+      .from("videos")
+      .insert([
+        {
+          title,
+          channelTitle,
+          viewCount: 0,
+          thumbnailUrl,
+          duration,
+          embedUrl,
+        },
+      ])
+      .select();
+
+    if (error) throw error;
+    res.status(201).json({ message: "Video added successfully!", data });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: "Failed to add video" });
+  }
+});
+
 const PORT = 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
