@@ -148,4 +148,5 @@ const InnerVideoContainer = styled.div`
   }
 `;
 
+export { OuterVideoContainer };
 export default Videos;

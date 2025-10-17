@@ -1,127 +1,134 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
-import { useMediaQuery } from '@material-ui/core'
-import {
-  TWO_COL_MIN_WIDTH,
-  useIsMobileView,
-  getFormattedDurationString,
-  TWO_COL_MAX_WIDTH,
-  useGetChannelDetails,
-} from '../../utils/utils'
-import { useGetVideoDetails } from './searchUtils'
-import { ChannelImage } from './ChannelImage'
-import { VideoThumbnail } from './VideoThumbnail'
-import { MobileChannelContent } from './MobileChannelContent'
-import { MobileVideoContent } from './MobileVideoContent'
-import { ChannelSubscribeButton } from './ChannelSubscribeButton'
-import { DesktopChannelContent } from './DesktopChannelContent'
-import { DesktopVideoContent } from './DesktopVideoContent'
+import { Typography } from '@material-ui/core'
+import { TWO_COL_MIN_WIDTH } from '../../utils/utils'
+import { useAtom } from 'jotai'
+import { historyAtom } from '../../store'
+import { timeAgo } from '../../utils/timeAgo'
+import { supabase } from '../../supabaseClient.ts'
 
+// Main Component 
 const ResultsVideoCard = ({ video }) => {
-  const {
-    id: { kind, videoId },
-    snippet: {
-      channelId,
-      channelTitle,
-      title,
-      publishedAt,
-      thumbnails,
-      description,
-    },
-  } = video
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [, setHistory] = useAtom(historyAtom)
+  const [viewCount, setViewCount] = useState(video.viewCount || 0)
 
-  const isMobileView = useIsMobileView()
-  const isVideo = kind === 'youtube#video'
-  const showSubscribeButton = useMediaQuery(
-    `(min-width: ${TWO_COL_MAX_WIDTH}px)`
-  )
-  const [viewCount, setViewCount] = useState(null)
-  const [duration, setDuration] = useState(null)
-  const [channelAvatar, setChannelAvatar] = useState(null)
-  const [channelInfo, setChannelInfo] = useState(null)
-  const thumbnailImage = thumbnails.medium.url
-
-  // get duration and viewCount
-  useGetVideoDetails(
-    true, // useLocalStorage
-    videoId,
-    setDuration,
-    setViewCount
-  )
-
-  // get channelAvatar for video or get channel info for channel
-  useGetChannelDetails(
-    true, // useLocalStorage
-    isVideo,
-    videoId,
-    channelId,
-    setChannelAvatar,
-    setChannelInfo
-  )
-
-  const formattedDuration = getFormattedDurationString(duration)
-
-  if (isVideo) {
-    return (
-      <StyledCard>
-        <VideoThumbnail {...{ thumbnailImage, formattedDuration }} />
-
-        {isMobileView ? (
-          <MobileVideoContent
-            {...{ title, channelTitle, publishedAt, viewCount }}
-          />
-        ) : (
-          <DesktopVideoContent
-            {...{
-              title,
-              viewCount,
-              publishedAt,
-              channelAvatar,
-              channelTitle,
-              description,
-            }}
-          />
-        )}
-      </StyledCard>
-    )
-  } else {
-    // if the row is a channel
-    return (
-      <StyledCard>
-        <ChannelImage thumbnailImage={thumbnailImage} />
-
-        {isMobileView ? (
-          <MobileChannelContent
-            {...{ channelTitle, isMobileView, channelInfo }}
-          />
-        ) : (
-          <DeskChannelContentContainer>
-            <DesktopChannelContent {...{ channelTitle, channelInfo }} />
-            {/* Red subscribe button if it's a channel on desktop view */}
-            {!isMobileView && showSubscribeButton && <ChannelSubscribeButton />}
-          </DeskChannelContentContainer>
-        )}
-      </StyledCard>
-    )
+  // Increment view count in Supabase
+  const incrementViewCount = async () => {
+    try {
+      const { error } = await supabase.rpc('increment_view', { video_id: Number(video.id) })
+      if (error) throw error
+      setViewCount(prev => (prev || 0) + 1)
+    } catch (err) {
+      console.error('Error incrementing view count:', err.message)
+    }
   }
+
+  const handleThumbnailClick = () => {
+    setIsPlaying(true)
+
+    // Increment view count
+    incrementViewCount()
+
+    // Add video to history
+    setHistory(prev => {
+      if (prev.some(v => v.id === video.id)) return prev
+      return [...prev, video]
+    })
+  }
+
+  return (
+    <StyledCard>
+      {isPlaying ? (
+        <VideoPlayer embedUrl={video.embedUrl} />
+      ) : (
+        <Thumbnail src={video.thumbnailUrl} alt={video.title} onClick={handleThumbnailClick} />
+      )}
+      <DeskChannelContentContainer>
+        <VideoTitle>{video.title}</VideoTitle>
+        <ChannelTitle>{video.channelTitle}</ChannelTitle>
+        <MetaData>
+          {viewCount} views • {timeAgo(video.publishedAt)}
+        </MetaData>
+      </DeskChannelContentContainer>
+    </StyledCard>
+  )
 }
 
 export default ResultsVideoCard
 
-const DeskChannelContentContainer = styled.div`
-  display: flex;
-  flex-grow: 1;
-  flex-basis: 60%;
-`
-
 const StyledCard = styled.div`
+  display: flex;
   margin-top: 12px;
   padding: 0 12px;
   height: 90px;
-  display: flex;
 
   @media screen and (min-width: ${TWO_COL_MIN_WIDTH}px) {
-    height: 100%;
     width: 100%;
+    height: auto;
+  }
+`
+
+const DeskChannelContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-basis: 60%;
+  margin-left: 12px;
+`
+
+const Thumbnail = styled.img`
+  width: 160px;
+  height: 90px;
+  object-fit: cover;
+  cursor: pointer;
+
+  @media screen and (min-width: ${TWO_COL_MIN_WIDTH}px) {
+    width: 246px;
+    height: 138px;
+  }
+`
+
+const VideoPlayer = styled.iframe.attrs(props => ({
+  src: props.embedUrl,
+  allowFullScreen: true,
+  frameBorder: 0,
+  scrolling: 'no',
+  title: 'Video Player',
+}))`
+  width: 160px;
+  height: 90px;
+
+  @media screen and (min-width: ${TWO_COL_MIN_WIDTH}px) {
+    width: 246px;
+    height: 138px;
+  }
+`
+const VideoTitle = styled(Typography)`
+  && {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+`
+
+const ChannelTitle = styled(Typography)`
+  && {
+    color: #606060;
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+`
+
+const MetaData = styled(Typography)`
+  && {
+    color: #909090;
+    font-size: 12px;
   }
 `
