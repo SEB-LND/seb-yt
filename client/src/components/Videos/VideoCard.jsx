@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components/macro'
 import Card from '@material-ui/core/Card'
-import CardMedia from '@material-ui/core/CardMedia'
+//import CardMedia from '@material-ui/core/CardMedia'
 import CardHeader from '@material-ui/core/CardHeader'
 import Avatar from '@material-ui/core/Avatar'
 import { Typography, IconButton } from '@material-ui/core'
-import {
-  useIsMobileView,
-  TWO_COL_MIN_WIDTH,
-} from '../../utils/utils'
+import { TWO_COL_MIN_WIDTH} from '../../utils/utils'
 import he from 'he'
 import { ChannelDetails } from './ChannelDetails'
 import { MoreButton } from './MoreButton'
@@ -17,6 +14,7 @@ import { historyAtom, likedAtom } from '../../store'
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt'
 import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined'
 import { supabase } from '../../supabaseClient.ts'
+//import { timeAgo } from '../../utils/timeAgo'
 
 // const sampleVideo = {
 //   id: 'dQw4w9WgXcQ', // YouTube video ID
