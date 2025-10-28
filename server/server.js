@@ -64,5 +64,4 @@ app.post("/api/videos", async (req, res) => {
   }
 });
 
-const PORT = 8080;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+module.exports = app;
