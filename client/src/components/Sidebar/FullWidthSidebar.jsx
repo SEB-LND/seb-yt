@@ -9,8 +9,8 @@ import {
   DESKTOP_VIEW_HEADER_HEIGHT,
 } from '../../utils/utils'
 import { SidebarFirstPart } from './SidebarFirstPart'
-//import { SidebarSecondPart } from './SidebarSecondPart'
-//import { SidebarThirdPart } from './SidebarThirdPart'
+import { SidebarSecondPart } from './SidebarSecondPart'
+import { SidebarThirdPart } from './SidebarThirdPart'
 import { CUSTOM_SCROLLBAR_CSS } from '../../CUSTOM_SCROLLBAR_CSS'
 import { useLocation } from 'react-router-dom'
 import { isSidebarDrawerOpenAtom } from '../../store'
