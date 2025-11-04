@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, TextField, Button } from "@material-ui/core";
 import styled from "styled-components/macro";
-import { supabase } from '../../../../supabaseClient.ts';
+import { supabase } from "../../../../supabaseClient.ts";
 
 const UploadVideoModal = ({ open, handleClose }) => {
   const [form, setForm] = useState({
@@ -19,6 +19,13 @@ const UploadVideoModal = ({ open, handleClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate all fields before submitting
+    const isFormValid = Object.values(form).every((value) => value.trim() !== "");
+    if (!isFormValid) {
+      alert("⚠ Please fill in all fields before uploading.");
+      return;
+    }
+
     try {
       const { error } = await supabase.from("videos").insert([
         {
@@ -35,6 +42,13 @@ const UploadVideoModal = ({ open, handleClose }) => {
 
       alert("✅ Video uploaded successfully!");
       handleClose();
+      setForm({
+        title: "",
+        channelTitle: "",
+        thumbnailUrl: "",
+        duration: "",
+        embedUrl: "",
+      }); // reset form after upload
     } catch (error) {
       console.error("Error uploading video:", error);
       alert("❌ Failed to upload video");
@@ -46,53 +60,13 @@ const UploadVideoModal = ({ open, handleClose }) => {
       <ModalContainer>
         <h2>Upload Video</h2>
         <form onSubmit={handleSubmit}>
-          <TextField
-            label="Title"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Channel Title"
-            name="channelTitle"
-            value={form.channelTitle}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Thumbnail URL"
-            name="thumbnailUrl"
-            value={form.thumbnailUrl}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Duration"
-            name="duration"
-            value={form.duration}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-            <TextField
-            label="Embed URL"
-            name="embedUrl"
-            value={form.embedUrl}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
+          <TextField label="Title" name="title" value={form.title} onChange={handleChange} fullWidth margin="normal" />
+          <TextField label="Channel Title" name="channelTitle" value={form.channelTitle} onChange={handleChange} fullWidth margin="normal" />
+          <TextField label="Thumbnail URL" name="thumbnailUrl" value={form.thumbnailUrl} onChange={handleChange} fullWidth margin="normal" />
+          <TextField label="Duration" name="duration" value={form.duration} onChange={handleChange} fullWidth margin="normal" />
+          <TextField label="Embed URL" name="embedUrl" value={form.embedUrl} onChange={handleChange} fullWidth margin="normal" />
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            style={{ marginTop: "16px" }}
-          >
+          <Button type="submit" variant="contained" color="primary" style={{ marginTop: "16px" }}>
             Upload
           </Button>
         </form>
