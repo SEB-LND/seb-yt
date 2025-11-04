@@ -9,7 +9,7 @@ import {
 import { useAtom } from 'jotai'
 import { searchTermAtom, searchResultsAtom } from '../../../store'
 import { useHistory } from 'react-router'
-import axios from 'axios'
+import { supabase } from '../../../supabaseClient.ts'
 
 export const SearchContainerWithTextField = () => {
   const [searchTerm, setSearchTerm] = useAtom(searchTermAtom)
@@ -21,9 +21,8 @@ export const SearchContainerWithTextField = () => {
     const term = searchTerm.trim().toLowerCase()
 
     try {
-      // Fetch all videos from your backend (which uses Supabase)
-      const res = await axios.get('http://localhost:8080/api/videos')
-      const videos = res.data || []
+      const { videos, error } = await supabase.from('videos').select('*');
+      if (error) throw error;
 
       // Filter videos by search term
       const filtered = videos.filter((video) =>

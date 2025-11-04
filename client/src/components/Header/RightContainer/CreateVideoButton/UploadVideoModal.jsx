@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, TextField, Button } from "@material-ui/core";
 import styled from "styled-components/macro";
+import { supabase } from '../../../../supabaseClient.ts';
 
 const UploadVideoModal = ({ open, handleClose }) => {
   const [form, setForm] = useState({
@@ -19,21 +20,24 @@ const UploadVideoModal = ({ open, handleClose }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8080/api/videos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+      const { error } = await supabase.from("videos").insert([
+        {
+          title: form.title,
+          channelTitle: form.channelTitle,
+          thumbnailUrl: form.thumbnailUrl,
+          duration: form.duration,
+          embedUrl: form.embedUrl,
+          viewCount: 0,
+        },
+      ]);
 
-      if (response.ok) {
-        alert("✅ Video uploaded successfully!");
-        handleClose();
-      } else {
-        alert("❌ Failed to upload video");
-      }
+      if (error) throw error;
+
+      alert("✅ Video uploaded successfully!");
+      handleClose();
     } catch (error) {
-      console.error("Error:", error);
-      alert("❌ Something went wrong");
+      console.error("Error uploading video:", error);
+      alert("❌ Failed to upload video");
     }
   };
 

@@ -8,7 +8,7 @@ import { GridItem } from "../components/Videos/GridItem";
 import { useAtom } from "jotai";
 import { userSettingToShowFullSidebarAtom, searchTermAtom } from "../store";
 import channels from "../components/ChipsBar/chipsArray";
-import axios from "axios"; 
+import { supabase } from "../supabaseClient.ts";
 import {
   TWO_COL_MIN_WIDTH,
   TWO_COL_MAX_WIDTH,
@@ -47,12 +47,12 @@ const Videos = ({ selectedChipIndex }) => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/videos");
-        let data = res.data;
+        const { data, error } = await supabase.from("videos").select("*");
+        if (error) throw error;
 
         let filtered = data || [];
 
-        // filter by channel if chip is selected
+        // Filter by channel
         if (selectedChannel !== "") {
           filtered = filtered.filter((video) =>
             video.channelTitle.toLowerCase().includes(selectedChannel.toLowerCase())

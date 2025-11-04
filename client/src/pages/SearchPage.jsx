@@ -9,7 +9,7 @@ import { TWO_COL_MIN_WIDTH, useIsMobileView } from '../utils/utils'
 import TuneIcon from '@material-ui/icons/Tune'
 import { FilterButton } from '../components/Search/FilterButton'
 import { List } from '@material-ui/core'
-import axios from 'axios'
+import { supabase } from "../supabaseClient.ts"
 
 const SearchPage = () => {
   const [searchResults, setSearchResults] = useAtom(searchResultsAtom)
@@ -26,23 +26,23 @@ const SearchPage = () => {
     if (query) {
       const fetchResults = async () => {
         try {
-          const res = await axios.get('http://localhost:8080/api/videos')
-          const videos = res.data || []
+          const { data: videos, error } = await supabase.from("videos").select("*");
+          if (error) throw error;
 
-          // Filter videos by search term
-          const filtered = videos.filter(video =>
+          const filtered = videos.filter((video) =>
             Object.values(video).some(
-              value =>
-                typeof value === 'string' &&
+              (value) =>
+                typeof value === "string" &&
                 value.toLowerCase().includes(query.toLowerCase())
             )
-          )
-          setSearchResults(filtered)
+          );
+
+          setSearchResults(filtered);
         } catch (err) {
-          console.error('Error fetching videos:', err)
-          setSearchResults([])
+          console.error("Error fetching videos:", err.message);
+          setSearchResults([]);
         }
-      }
+      };
 
       fetchResults()
     }
