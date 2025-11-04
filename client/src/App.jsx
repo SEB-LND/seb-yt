@@ -23,7 +23,7 @@ function App() {
         const { data, error } = await supabase
           .from('videos')
           .select('*')
-          .order('created_at', { ascending: false });
+          .order('publishedAt', { ascending: false });
 
         if (error) throw error;
         setVideos(data || []);
