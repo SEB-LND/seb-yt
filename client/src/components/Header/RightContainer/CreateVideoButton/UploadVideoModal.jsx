@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Modal, TextField, Button } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Modal, TextField, Button, Typography, Box } from "@material-ui/core";
 import styled from "styled-components/macro";
 import { supabase } from "../../../../supabaseClient.ts";
 
@@ -12,6 +12,19 @@ const UploadVideoModal = ({ open, handleClose }) => {
     embedUrl: "",
   });
 
+  // Reset form whenever modal is closed
+  useEffect(() => {
+    if (!open) {
+      setForm({
+        title: "",
+        channelTitle: "",
+        thumbnailUrl: "",
+        duration: "",
+        embedUrl: "",
+      });
+    }
+  }, [open]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -19,7 +32,7 @@ const UploadVideoModal = ({ open, handleClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate all fields before submitting
+    // Validate all fields
     const isFormValid = Object.values(form).every((value) => value.trim() !== "");
     if (!isFormValid) {
       alert("⚠ Please fill in all fields before uploading.");
@@ -41,14 +54,7 @@ const UploadVideoModal = ({ open, handleClose }) => {
       if (error) throw error;
 
       alert("✅ Video uploaded successfully!");
-      handleClose();
-      setForm({
-        title: "",
-        channelTitle: "",
-        thumbnailUrl: "",
-        duration: "",
-        embedUrl: "",
-      }); // reset form after upload
+      handleClose(); 
     } catch (error) {
       console.error("Error uploading video:", error);
       alert("❌ Failed to upload video");
@@ -58,17 +64,78 @@ const UploadVideoModal = ({ open, handleClose }) => {
   return (
     <Modal open={open} onClose={handleClose}>
       <ModalContainer>
-        <h2>Upload Video</h2>
-        <form onSubmit={handleSubmit}>
-          <TextField label="Title" name="title" value={form.title} onChange={handleChange} fullWidth margin="normal" />
-          <TextField label="Channel Title" name="channelTitle" value={form.channelTitle} onChange={handleChange} fullWidth margin="normal" />
-          <TextField label="Thumbnail URL" name="thumbnailUrl" value={form.thumbnailUrl} onChange={handleChange} fullWidth margin="normal" />
-          <TextField label="Duration" name="duration" value={form.duration} onChange={handleChange} fullWidth margin="normal" />
-          <TextField label="Embed URL" name="embedUrl" value={form.embedUrl} onChange={handleChange} fullWidth margin="normal" />
+        <Typography
+          variant="h5"
+          style={{ fontWeight: 600, marginBottom: "12px", textAlign: "center" }}
+        >
+          📤 Upload Video
+        </Typography>
 
-          <Button type="submit" variant="contained" color="primary" style={{ marginTop: "16px" }}>
-            Upload
-          </Button>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          align="center"
+          style={{ marginBottom: "20px" }}
+        >
+          Please fill in all required fields before submitting
+        </Typography>
+
+        <form onSubmit={handleSubmit}>
+          <StyledTextField
+            label="Title"
+            name="title"
+            value={form.title}
+            onChange={handleChange}
+            fullWidth
+          />
+          <StyledTextField
+            label="Channel Title"
+            name="channelTitle"
+            value={form.channelTitle}
+            onChange={handleChange}
+            fullWidth
+          />
+          <StyledTextField
+            label="Thumbnail URL"
+            name="thumbnailUrl"
+            value={form.thumbnailUrl}
+            onChange={handleChange}
+            fullWidth
+          />
+          <StyledTextField
+            label="Duration"
+            name="duration"
+            value={form.duration}
+            onChange={handleChange}
+            fullWidth
+          />
+          <StyledTextField
+            label="Embed URL"
+            name="embedUrl"
+            value={form.embedUrl}
+            onChange={handleChange}
+            fullWidth
+          />
+
+          <ButtonGroup>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!Object.values(form).every((v) => v.trim() !== "")}
+              style={{ borderRadius: "8px", fontWeight: 600 }}
+            >
+              Upload
+            </Button>
+            <Button
+              onClick={handleClose} 
+              variant="outlined"
+              color="secondary"
+              style={{ borderRadius: "8px", fontWeight: 600 }}
+            >
+              Cancel
+            </Button>
+          </ButtonGroup>
         </form>
       </ModalContainer>
     </Modal>
@@ -77,14 +144,33 @@ const UploadVideoModal = ({ open, handleClose }) => {
 
 export default UploadVideoModal;
 
-const ModalContainer = styled.div`
+const ModalContainer = styled(Box)`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  width: 400px;
-  box-shadow: 0px 4px 20px rgba(0,0,0,0.2);
+  background: #ffffff;
+  padding: 32px 28px;
+  border-radius: 16px;
+  width: 420px;
+  max-width: 90%;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const StyledTextField = styled(TextField)`
+  && {
+    margin-bottom: 16px;
+    .MuiInputBase-root {
+      border-radius: 8px;
+    }
+  }
+`;
+
+const ButtonGroup = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
 `;
