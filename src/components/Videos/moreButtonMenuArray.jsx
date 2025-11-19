@@ -1,5 +1,6 @@
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
+import EditIcon from '@material-ui/icons/Edit'
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd'
 import BlockIcon from '@material-ui/icons/Block'
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline'
@@ -18,6 +19,12 @@ export const moreButtonMenuArray = [
     defaultText: 'Save to Watch Later',
     altText: 'Remove from Watch Later',
     defaultIcon: QueryBuilderIcon,
+  },
+  {
+    action: 'edit',
+    defaultText: 'Edit',
+    defaultIcon: EditIcon,
+    onlyForOwner: true,
   },
 
   // { Icon: BlockIcon, text: 'Not interested' },

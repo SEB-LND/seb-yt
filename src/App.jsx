@@ -10,6 +10,7 @@ import HistoryPage from './pages/HistoryPage';
 import PlaylistPage from './pages/PlaylistPage';
 import WatchLaterPage from './pages/WatchLaterPage';
 import LikedVideosPage from './pages/LikedVideosPage';
+import EditPage from './pages/EditPage';
 import { supabase } from './supabaseClient.ts';
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
           <Route path="/playlist" component={PlaylistPage} />
           <Route path="/watch-later" component={WatchLaterPage} />
           <Route path="/liked-videos" component={LikedVideosPage} />
+          <Route path="/edit-video/:id" component={EditPage} />
         </Switch>
         {isMobileView && <MobileFooter />}
       </div>

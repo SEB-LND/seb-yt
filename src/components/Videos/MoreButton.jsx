@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 import { StyledIconButton } from './VideoCard'
@@ -9,12 +9,17 @@ import { useAtom } from 'jotai'
 import { moreButtonMenuArray } from './moreButtonMenuArray'
 import { playlistAtom } from '../../store'
 import { watchLaterAtom } from '../../store'
+import { useHistory } from 'react-router-dom'
+import { supabase } from '../../supabaseClient.ts'
 
 export const MoreButton = ({ isSearchPage, video }) => {
+  const history = useHistory();
   const isMobileView = useIsMobileView()
   const [playlist, setPlaylist] = useAtom(playlistAtom)
   const [watchLater, setWatchLater] = useAtom(watchLaterAtom)
   
+  const currentUserRole = localStorage.getItem('role') || 'user'
+
   const isInPlaylist = playlist.some(v => v.id === video?.id)
   const isInWatchLater = watchLater.some(v => v.id === video?.id)
 
@@ -34,8 +39,16 @@ export const MoreButton = ({ isSearchPage, video }) => {
         Icon: isInWatchLater ? DeleteOutlineIcon : item.defaultIcon,
       }
     }
+    if (item.action === 'edit') {
+      if (currentUserRole !== 'AdminIsNana') return null
+      return { 
+        ...item, 
+        text: item.defaultText, 
+        Icon: item.defaultIcon, 
+        onClick: () => history.push(`/edit-video/${video.id}`) }
+    }
     return item
-  })
+  }).filter(Boolean)
 
   // states for Modal in mobile view
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -74,7 +87,8 @@ export const MoreButton = ({ isSearchPage, video }) => {
         return exists ? prev.filter(v => v.id !== video.id) : [...prev, video]
       })
     }
-
+    if (item.onClick) item.onClick()
+      
     setIsPopupOpen(false)
     setIsModalOpen(false)
   }

@@ -68,7 +68,7 @@ const UploadVideoModal = ({ open, handleClose }) => {
           variant="h5"
           style={{ fontWeight: 600, marginBottom: "12px", textAlign: "center" }}
         >
-          📤 Upload Video
+          Upload Video
         </Typography>
 
         <Typography
