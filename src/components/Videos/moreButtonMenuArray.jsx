@@ -1,6 +1,7 @@
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
 import EditIcon from '@material-ui/icons/Edit'
+import DeleteIcon from '@material-ui/icons/Delete'
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd'
 import BlockIcon from '@material-ui/icons/Block'
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline'
@@ -26,7 +27,12 @@ export const moreButtonMenuArray = [
     defaultIcon: EditIcon,
     onlyForOwner: true,
   },
-
+  {
+    action: 'delete',
+    defaultText: 'Delete',
+    defaultIcon: DeleteIcon,
+    onlyForOwner: true,
+  },
   // { Icon: BlockIcon, text: 'Not interested' },
   // { Icon: RemoveCircleOutlineIcon, text: "Don't recommend channel" },
   // { Icon: FlagOutlinedIcon, text: 'Report' },
