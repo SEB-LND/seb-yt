@@ -1,67 +1,35 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 import Card from '@material-ui/core/Card'
+import CardMedia from '@material-ui/core/CardMedia'
 import CardHeader from '@material-ui/core/CardHeader'
 import Avatar from '@material-ui/core/Avatar'
 import { Typography, IconButton } from '@material-ui/core'
-import {TWO_COL_MIN_WIDTH} from '../../utils/utils'
+import {
+  useIsMobileView,
+  TWO_COL_MIN_WIDTH,
+} from '../../utils/utils'
 import he from 'he'
 import { ChannelDetails } from './ChannelDetails'
 import { MoreButton } from './MoreButton'
-import { useAtom } from 'jotai'
-import { historyAtom, likedAtom } from '../../store' 
-import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt'
-import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined'
-import { supabase } from '../../supabaseClient.ts'
+
+// const sampleVideo = {
+//   id: 'dQw4w9WgXcQ', // YouTube video ID
+//   title: 'The 6 Switching Duties of High Voltage Switchgears',
+//   channelTitle: 'EIU/CAC',
+//   publishedAt: '2009-10-25T06:57:33Z',
+//   viewCount: '55',
+//   thumbnailUrl: 'https://www.nomadfoods.com/wp-content/uploads/2018/08/placeholder-1-e1533569576673.png',
+//   duration: '4:42',
+//   embedUrl: 'https://power2grow.sharepoint.com/sites/LearningDevelopment/_layouts/15/embed.aspx?UniqueId=f3de6630-1499-4a69-bbc9-0b690aacd37d&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
+// }
 
 const VideoCard = (vid) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const sampleVideo = vid.video
-  const [, setHistory] = useAtom(historyAtom)
-  const [likedVideos, setLikedVideos] = useAtom(likedAtom)
-  const [viewCount, setViewCount] = useState(sampleVideo.viewCount || 0)
-
-  // Increment view count via Supabase RPC
-  const incrementViewCount = async () => {
-    try {
-      const { error } = await supabase.rpc('increment_view', {
-        video_id: Number(sampleVideo.id),
-      })
-      if (error) throw error
-
-      setViewCount((prev) => (prev || 0) + 1)
-      console.log('✅ View count incremented for video ID:', sampleVideo.id)
-    } catch (err) {
-      console.error('❌ Error incrementing view count:', err.message)
-    }
-  }
-
-  // Trigger increment when video starts playing
-  useEffect(() => {
-    if (isPlaying) {
-      incrementViewCount()
-    }
-  }, [isPlaying])
 
   const handleThumbnailClick = () => {
     setIsPlaying(true)
-
-   // Save video to history when played
-    setHistory((prev) => {
-      const alreadyInHistory = prev.some((v) => v.id === sampleVideo.id)
-      if (alreadyInHistory) return prev
-      return [...prev, sampleVideo]
-    })
-  }
-
-    // --- Like toggle ---
-  const isLiked = likedVideos.some((v) => v.id === sampleVideo.id)
-  const toggleLike = () => {
-    if (isLiked) {
-      setLikedVideos(likedVideos.filter((v) => v.id !== sampleVideo.id))
-    } else {
-      setLikedVideos([...likedVideos, sampleVideo])
-    }
   }
 
   return (
@@ -78,14 +46,7 @@ const VideoCard = (vid) => {
 
       <StyledCardHeader
         // avatar={<StyledAvatar src={sampleVideo.channelAvatarUrl} />}
-        action={
-          <ActionContainer>
-            <IconButton onClick={toggleLike}>
-              {isLiked ? <ThumbUpAltIcon style={{ color: 'red' }} /> : <ThumbUpAltOutlinedIcon />}
-            </IconButton>
-            <MoreButton video={sampleVideo} isSearchPage={false}/>
-          </ActionContainer>
-        }
+        action={<MoreButton />}
         title={<VideoTitle variant="h3">{he.decode(sampleVideo.title)}</VideoTitle>}
         subheader={
           <ChannelDetails
@@ -98,12 +59,6 @@ const VideoCard = (vid) => {
     </StyledCard>
   )
 }
-
-const ActionContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`
 
 const Thumbnail = ({ thumbnailImage, formattedDuration, onClick }) => {
   return (
