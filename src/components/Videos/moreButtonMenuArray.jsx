@@ -2,10 +2,6 @@ import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd'
-import BlockIcon from '@material-ui/icons/Block'
-import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline'
-import FlagOutlinedIcon from '@material-ui/icons/FlagOutlined'
 
 export const moreButtonMenuArray = [
   // { Icon: PlaylistPlayIcon, text: 'Add to queue' },
