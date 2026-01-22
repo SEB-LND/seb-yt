@@ -1,4 +1,3 @@
-// hardcoded to change to api call later
 export const landingPageVideosForTesting = [
   {
     id: "1",
