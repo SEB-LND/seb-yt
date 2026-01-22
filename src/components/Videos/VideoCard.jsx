@@ -13,17 +13,6 @@ import he from 'he'
 import { ChannelDetails } from './ChannelDetails'
 import { MoreButton } from './MoreButton'
 
-// const sampleVideo = {
-//   id: 'dQw4w9WgXcQ', // YouTube video ID
-//   title: 'The 6 Switching Duties of High Voltage Switchgears',
-//   channelTitle: 'EIU/CAC',
-//   publishedAt: '2009-10-25T06:57:33Z',
-//   viewCount: '55',
-//   thumbnailUrl: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
-//   duration: '4:42',
-//   embedUrl: 'https://power2grow.sharepoint.com/sites/LearningDevelopment/_layouts/15/embed.aspx?UniqueId=f3de6630-1499-4a69-bbc9-0b690aacd37d&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-// }
-
 const VideoCard = (vid) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const sampleVideo = vid.video
