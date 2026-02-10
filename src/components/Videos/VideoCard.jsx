@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 import Card from '@material-ui/core/Card'
-import CardMedia from '@material-ui/core/CardMedia'
 import CardHeader from '@material-ui/core/CardHeader'
 import Avatar from '@material-ui/core/Avatar'
 import { Typography, IconButton } from '@material-ui/core'
-import {
-  useIsMobileView,
-  TWO_COL_MIN_WIDTH,
-} from '../../utils/utils'
+import TWO_COL_MIN_WIDTH from '../../utils/utils'
 import he from 'he'
 import { ChannelDetails } from './ChannelDetails'
 import { MoreButton } from './MoreButton'

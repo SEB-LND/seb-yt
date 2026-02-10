@@ -8,7 +8,6 @@ import {
 } from '../../../utils/utils'
 import MobileViewSearchDrawer from './MobileViewSearchDrawer'
 import { SearchContainerWithTextField } from './SearchContainerWithTextField'
-import { MicButton } from './MicButton'
 import { SearchButton } from './SearchButton'
 import { useLocation, useHistory } from 'react-router'
 import { useAtom } from 'jotai'
