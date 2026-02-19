@@ -35,6 +35,7 @@ function shuffleArray(array) {
   return shuffled;
 }
 
+
 const Videos = ({ selectedChipIndex }) => {
   const VIDEOS_PER_QUERY = 24;
   const isMobileView = useIsMobileView();
@@ -43,6 +44,20 @@ const Videos = ({ selectedChipIndex }) => {
   const [filteredVideos, setFilteredVideos] = useState([]);
 
   const selectedChannel = channels[selectedChipIndex].channelTitle;
+
+  useEffect(() => {
+  const checkSession = async () => {
+    const { data } = await supabase.auth.getSession();
+
+    if (!data.session) {
+      await supabase.auth.signInWithOAuth({
+        provider: "azure", // or your company provider
+      });
+    }
+  };
+
+  checkSession();
+}, []);
 
   useEffect(() => {
     const fetchVideos = async () => {
