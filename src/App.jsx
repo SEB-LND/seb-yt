@@ -19,9 +19,9 @@ function App() {
   const [accessGranted, setAccessGranted] = useState(false);
   const [videos, setVideos] = useState([]);
 
-// READ access from localStorage on first load
+// READ access from sessionStorage on first load
   useEffect(() => {
-    const granted = localStorage.getItem("access_granted") === "true";
+    const granted = sessionStorage.getItem("access_granted") === "true";
     setAccessGranted(granted);
   }, []);
 

@@ -3,6 +3,116 @@ import styled, { keyframes, createGlobalStyle } from "styled-components/macro";
 import { useHistory } from "react-router-dom";
 import { supabase } from "../supabaseClient.ts";
 
+// Component
+const LandingPage = ({ onSuccess }) => {
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const history = useHistory();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    const trimmedCode = code.trim();
+    if (!trimmedCode) { setError("Please enter an access code."); return; }
+    setLoading(true);
+    try {
+      const { data, error: sbError } = await supabase
+        .from("access codes")
+        .select("*")
+        .ilike("code", trimmedCode)
+        .single();
+
+      if (sbError || !data) {
+        setError("Incorrect code. Please try again.");
+        return;
+      }
+      sessionStorage.setItem("access_granted", "true");
+      if (onSuccess) onSuccess();
+      history.push("/main");
+    } catch (err) {
+      console.error("Error checking access code:", err.message);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <GlobalStyle />
+      <Container>
+
+        {/* ── Left: Logo Panel ── */}
+        <LeftPanel>
+          <LogoWrapper>
+            <img
+              src="https://www.sarawakenergy.com/assets/images/general/logo.png"
+              alt="Sarawak Energy"
+            />
+          </LogoWrapper>
+          <GreenAccentBar />
+          <Tagline>Powering Sarawak's sustainable future</Tagline>
+          <PoweredBadge>Sarawak Energy Berhad</PoweredBadge>
+        </LeftPanel>
+
+        {/* ── Right: Form Panel ── */}
+        <RightPanel>
+          <Card>
+            <CardEyebrow>Secure Access</CardEyebrow>
+            <CardHeading>Welcome Back</CardHeading>
+            <CardSubtext>Enter your access code to continue to the portal.</CardSubtext>
+
+            <form onSubmit={handleSubmit}>
+              <Label htmlFor="access-code">Access Code</Label>
+              <InputWrapper>
+                <Input
+                  id="access-code"
+                  type={showPassword ? "text" : "password"}
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  placeholder="•••••••"
+                  $hasError={!!error}
+                  autoComplete="off"
+                  style={{ paddingRight: '44px' }}
+                />
+                <EyeButton
+                  type="button"
+                  onClick={() => setShowPassword(v => !v)}
+                  aria-label={showPassword ? "Hide code" : "Show code"}
+                >
+                  {showPassword ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                      <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  )}
+                </EyeButton>
+              </InputWrapper>
+
+              <Button type="submit" disabled={loading}>
+                {loading ? "Verifying…" : "Continue →"}
+              </Button>
+            </form>
+
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+          </Card>
+        </RightPanel>
+
+      </Container>
+    </>
+  );
+};
+
+export default LandingPage;
+
 /* ── Landing Page Color ────────────────────────────
    Primary Blue  : #0072CE
    Dark Blue     : #005BA5
@@ -18,7 +128,7 @@ const GlobalStyle = createGlobalStyle`
   *, *::before, *::after { box-sizing: border-box; }
 `;
 
-const fadeUp = keyframes`
+const fadeUp = keyframes`C
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 `;
@@ -251,113 +361,3 @@ const EyeButton = styled.button`
 
   &:hover { color: #0072CE; }
 `;
-
-// Component
-const LandingPage = ({ onSuccess }) => {
-  const [code, setCode] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const history = useHistory();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    const trimmedCode = code.trim();
-    if (!trimmedCode) { setError("Please enter an access code."); return; }
-    setLoading(true);
-    try {
-      const { data, error: sbError } = await supabase
-        .from("access codes")
-        .select("*")
-        .ilike("code", trimmedCode)
-        .single();
-
-      if (sbError || !data) {
-        setError("Incorrect code. Please try again.");
-        return;
-      }
-      localStorage.setItem("access_granted", "true");
-      if (onSuccess) onSuccess();
-      history.push("/main");
-    } catch (err) {
-      console.error("Error checking access code:", err.message);
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <>
-      <GlobalStyle />
-      <Container>
-
-        {/* ── Left: Logo Panel ── */}
-        <LeftPanel>
-          <LogoWrapper>
-            <img
-              src="https://www.sarawakenergy.com/assets/images/general/logo.png"
-              alt="Sarawak Energy"
-            />
-          </LogoWrapper>
-          <GreenAccentBar />
-          <Tagline>Powering Sarawak's sustainable future</Tagline>
-          <PoweredBadge>Sarawak Energy Berhad</PoweredBadge>
-        </LeftPanel>
-
-        {/* ── Right: Form Panel ── */}
-        <RightPanel>
-          <Card>
-            <CardEyebrow>Secure Access</CardEyebrow>
-            <CardHeading>Welcome Back</CardHeading>
-            <CardSubtext>Enter your access code to continue to the portal.</CardSubtext>
-
-            <form onSubmit={handleSubmit}>
-              <Label htmlFor="access-code">Access Code</Label>
-              <InputWrapper>
-                <Input
-                  id="access-code"
-                  type={showPassword ? "text" : "password"}
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  placeholder="•••••••"
-                  $hasError={!!error}
-                  autoComplete="off"
-                  style={{ paddingRight: '44px' }}
-                />
-                <EyeButton
-                  type="button"
-                  onClick={() => setShowPassword(v => !v)}
-                  aria-label={showPassword ? "Hide code" : "Show code"}
-                >
-                  {showPassword ? (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-                      <line x1="1" y1="1" x2="23" y2="23"/>
-                    </svg>
-                  ) : (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                      <circle cx="12" cy="12" r="3"/>
-                    </svg>
-                  )}
-                </EyeButton>
-              </InputWrapper>
-
-              <Button type="submit" disabled={loading}>
-                {loading ? "Verifying…" : "Continue →"}
-              </Button>
-            </form>
-
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-          </Card>
-        </RightPanel>
-
-      </Container>
-    </>
-  );
-};
-
-export default LandingPage;
