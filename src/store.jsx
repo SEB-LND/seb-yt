@@ -1,4 +1,5 @@
 import { atom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 
 export const isSidebarDrawerOpenAtom = atom(false)
 
@@ -7,3 +8,7 @@ export const userSettingToShowFullSidebarAtom = atom(true)
 
 export const searchTermAtom = atom('')
 export const searchResultsAtom = atom(null)
+export const historyAtom = atomWithStorage('history', [])
+export const playlistAtom = atomWithStorage('playlist', [])
+export const watchLaterAtom = atomWithStorage('watchLater', [])
+export const likedAtom = atomWithStorage('liked', [])

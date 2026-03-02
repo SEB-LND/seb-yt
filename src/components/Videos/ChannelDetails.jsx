@@ -4,6 +4,7 @@ import { Typography } from '@material-ui/core'
 import { TWO_COL_MIN_WIDTH, useIsMobileView } from '../../utils/utils'
 import moment from 'moment'
 import numeral from 'numeral'
+import { timeAgo } from '../../utils/timeAgo'
 
 export const ChannelDetails = ({
   channelTitle,
@@ -47,10 +48,10 @@ const Stats = ({ viewCount, publishedAt }) => {
   return (
     <>
     {/* if need the view count, change to 4px */}
-      <span style={{ marginRight: '0px' }}>
-        {/* {numeral(viewCount).format('0.a')} views <DotSeparator /> */}
+      <span style={{ marginRight: '4px' }}>
+        {numeral(viewCount).format('0.a')} views <DotSeparator /> 
       </span>
-      <span>{moment(publishedAt).fromNow()}</span>
+      <span>{timeAgo(publishedAt)}</span>
     </>
   )
 }

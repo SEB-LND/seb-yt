@@ -9,27 +9,40 @@ import {
 import { useAtom } from 'jotai'
 import { searchTermAtom, searchResultsAtom } from '../../../store'
 import { useHistory } from 'react-router'
-import { landingPageVideosForTesting } from '../../../utils/videos'
+import { supabase } from '../../../supabaseClient.ts'
 
 export const SearchContainerWithTextField = () => {
   const [searchTerm, setSearchTerm] = useAtom(searchTermAtom)
   const [, setSearchResults] = useAtom(searchResultsAtom)
   const history = useHistory()
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    if (searchTerm.trim() === '') {
-      setSearchResults([])
-    } else {
-      const lowercasedSearchTerm = searchTerm.toLowerCase()
-      const filtered = landingPageVideosForTesting.filter(video => 
-        Object.values(video).some(value => 
-          typeof value === 'string' && value.toLowerCase().includes(lowercasedSearchTerm)
+    const term = searchTerm.trim().toLowerCase()
+
+    try {
+      const { videos, error } = await supabase.from('videos').select('*');
+      if (error) throw error;
+
+      // Filter videos by search term
+      const filtered = videos.filter((video) =>
+        Object.values(video).some(
+          (value) =>
+            typeof value === 'string' &&
+            value.toLowerCase().includes(term)
         )
       )
+
+      // Store results in atom so SearchPage can display them
       setSearchResults(filtered)
+
+      // Navigate to results page with query param
+      history.push(`/results?search_query=${encodeURIComponent(searchTerm)}`)
+    } catch (error) {
+      console.error('Error searching videos:', error)
+      setSearchResults([])
+      history.push(`/results?search_query=${encodeURIComponent(searchTerm)}`)
     }
-    history.push('/search')
   }
 
   // reset searchTerm when click on Home button and goes to landing page
@@ -71,21 +84,14 @@ export const SearchBox = styled.input`
   font-size: 16px;
 
   &::placeholder {
-    font-family: $font-default;
     color: #909090;
     font-size: 16px;
-  }
-
-  &::-webkit-input-placeholder {
-    /* not sure if it will solve the Safari vertical alignment issue */
-    line-height: revert;
   }
 `
 
 export const SearchIconContainer = styled.div`
   width: 72px;
   height: 40px;
-  /* background-color: red; */
   display: grid;
   place-items: center;
   flex-grow: 1;

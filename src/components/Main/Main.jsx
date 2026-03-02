@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ChipsBar } from '../ChipsBar/ChipsBar'
-import Videos from '../../pages/LandingPage'
+import Videos from '../../pages/MainPage'
 
 const Main = () => {
   const [selectedChipIndex, setSelectedChipIndex] = useState(0)

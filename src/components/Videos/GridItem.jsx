@@ -1,6 +1,6 @@
 import React from 'react'
 import VideoCard from './VideoCard'
-import { Grid, Paper } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import { VideoSkeleton } from './VideoSkeleton'
 
 export const GridItem = ({ video }) => {
