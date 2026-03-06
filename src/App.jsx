@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import Header from "./components/Header/Header.jsx";
 import MobileFooter from "./components/Footer/Footer.jsx";
 import Main from "./components/Main/Main.jsx";
@@ -16,14 +16,10 @@ import "./App.css";
 
 function App() {
   const isMobileView = useIsMobileView();
-  const [accessGranted, setAccessGranted] = useState(false);
+  const [accessGranted, setAccessGranted] = useState(() => {
+    return sessionStorage.getItem("access_granted") === "true";
+  });
   const [videos, setVideos] = useState([]);
-
-// READ access from sessionStorage on first load
-  useEffect(() => {
-    const granted = sessionStorage.getItem("access_granted") === "true";
-    setAccessGranted(granted);
-  }, []);
 
   // Fetch videos only if access is granted
   useEffect(() => {
@@ -47,50 +43,48 @@ function App() {
   }, [accessGranted]);
 
   return (
-    <Router>
-      <div className="App">
-        {/* Only show header if access granted */}
-        {accessGranted && <Header />}
+    <div className="App">
+      {/* Only show header if access granted */}
+      {accessGranted && <Header />}
 
-        <Switch>
-          {/* Landing Page */}
-          <Route exact path="/">
-            {accessGranted ? <Redirect to="/main" /> : <LandingPage onSuccess={() => setAccessGranted(true)} />}
-          </Route>
+      <Switch>
+        {/* Landing Page */}
+        <Route exact path="/">
+          {accessGranted ? <Redirect to="/main" /> : <LandingPage onSuccess={() => setAccessGranted(true)} />}
+        </Route>
 
-          {/* Main Page */}
-          <Route path="/main">
-            {accessGranted ? <Main videos={videos} /> : <Redirect to="/" />}
-          </Route>
+        {/* Main Page */}
+        <Route path="/main">
+          {accessGranted ? <Main videos={videos} /> : <Redirect to="/" />}
+        </Route>
 
-          {/* Other pages (protected) */}
-          <Route path="/results">
-            {accessGranted ? <SearchPage /> : <Redirect to="/" />}
-          </Route>
-          <Route path="/history">
-            {accessGranted ? <HistoryPage /> : <Redirect to="/" />}
-          </Route>
-          <Route path="/playlist">
-            {accessGranted ? <PlaylistPage /> : <Redirect to="/" />}
-          </Route>
-          <Route path="/watch-later">
-            {accessGranted ? <WatchLaterPage /> : <Redirect to="/" />}
-          </Route>
-          <Route path="/liked-videos">
-            {accessGranted ? <LikedVideosPage /> : <Redirect to="/" />}
-          </Route>
-          <Route path="/edit-video/:id">
-            {accessGranted ? <EditPage /> : <Redirect to="/" />}
-          </Route>
+        {/* Other pages (protected) */}
+        <Route path="/results">
+          {accessGranted ? <SearchPage /> : <Redirect to="/" />}
+        </Route>
+        <Route path="/history">
+          {accessGranted ? <HistoryPage /> : <Redirect to="/" />}
+        </Route>
+        <Route path="/playlist">
+          {accessGranted ? <PlaylistPage /> : <Redirect to="/" />}
+        </Route>
+        <Route path="/watch-later">
+          {accessGranted ? <WatchLaterPage /> : <Redirect to="/" />}
+        </Route>
+        <Route path="/liked-videos">
+          {accessGranted ? <LikedVideosPage /> : <Redirect to="/" />}
+        </Route>
+        <Route path="/edit-video/:id">
+          {accessGranted ? <EditPage /> : <Redirect to="/" />}
+        </Route>
 
-          {/* Fallback */}
-          <Redirect to="/" />
-        </Switch>
+        {/* Fallback */}
+        <Redirect to="/" />
+      </Switch>
 
-        {/* Only show mobile footer if access granted */}
-        {accessGranted && isMobileView && <MobileFooter />}
-      </div>
-    </Router>
+      {/* Only show mobile footer if access granted */}
+      {accessGranted && isMobileView && <MobileFooter />}
+    </div>
   );
 }
 
