@@ -37,16 +37,22 @@ export const HEADER_OPACITY = 0.98
 
 // useMediaQuery hooks
 export const useIsMobileView = () =>
-  !useMediaQuery(`(min-width: ${TWO_COL_MIN_WIDTH}px)`)
+  !useMediaQuery(`(min-width: ${TWO_COL_MIN_WIDTH}px)`, { noSsr: true })
 
 export const useShouldOpenSidebarDrawer = () =>
-  !useMediaQuery(`(min-width:${SHOW_FULL_SIDEBAR_BREAKPOINT}px)`)
+  !useMediaQuery(`(min-width:${SHOW_FULL_SIDEBAR_BREAKPOINT}px)`, {
+    noSsr: true,
+  })
 
 export const useMinWidthToShowFullSidebar = () =>
-  useMediaQuery(`(min-width: ${SHOW_FULL_SIDEBAR_BREAKPOINT}px)`)
+  useMediaQuery(`(min-width: ${SHOW_FULL_SIDEBAR_BREAKPOINT}px)`, {
+    noSsr: true,
+  })
 
 export const useShouldShowMiniSidebar = () =>
-  useMediaQuery(`(min-width: ${SHOW_MINI_SIDEBAR_BREAKPOINT}px)`)
+  useMediaQuery(`(min-width: ${SHOW_MINI_SIDEBAR_BREAKPOINT}px)`, {
+    noSsr: true,
+  })
 
 // clear the searchTerm when navigate back to home screen
 export const useClearSearchTerm = (history, searchTermSetterFunction) => {
