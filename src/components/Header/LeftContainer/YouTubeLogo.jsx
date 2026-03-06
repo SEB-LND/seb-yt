@@ -24,6 +24,7 @@ const YouTubeLogo = () => {
               isInSearchResultsPage && isMobileView ? smallLogoUrl : fullLogoUrl
             }
             alt="logo"
+            style={{ height: '20px', width: 'auto', objectFit: 'contain' }}
           />
         </YouTubeLogoContainer>
       </YouTubeLogoTooltip>
