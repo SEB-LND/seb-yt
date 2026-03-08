@@ -9,7 +9,7 @@ const LeftContainer = () => {
   const isMobileView = useIsMobileView()
 
   return (
-    <StyledLeftContainer>
+    <StyledLeftContainer data-header-left>
       {/* mobile view hides the hamburgerMenu */}
       {isMobileView ? null : <HamburgerMenuIcon />}
       <YouTubeLogo />

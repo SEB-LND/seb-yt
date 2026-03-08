@@ -16,14 +16,16 @@ const YouTubeLogo = () => {
   const isInSearchResultsPage = currentLocation.pathname === '/results'
 
   return (
-    <Link to="/">
+    <Link to="/" className="header-home-link" data-header-home-link>
       <YouTubeLogoTooltip title="Sarawak Energy Videos">
-        <YouTubeLogoContainer>
+        <YouTubeLogoContainer data-header-logo-wrap>
           <Logo
             src={
               isInSearchResultsPage && isMobileView ? smallLogoUrl : fullLogoUrl
             }
             alt="logo"
+            width="60"
+            height="20"
           />
         </YouTubeLogoContainer>
       </YouTubeLogoTooltip>
@@ -47,14 +49,17 @@ const YouTubeLogoTooltip = styled(({ className, ...props }) => (
   }
 `
 
-const YouTubeLogoContainer = styled.button`
+const YouTubeLogoContainer = styled.div`
   border: none;
   background-color: transparent;
   height: 100%;
+  display: flex;
+  align-items: center;
 `
 
 const Logo = styled.img`
   margin: auto 1rem;
+  width: 60px;
   height: 20px;
   cursor: pointer;
   @media screen and (min-width: ${TWO_COL_MIN_WIDTH}px) {

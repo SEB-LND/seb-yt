@@ -49,14 +49,15 @@ export const SearchContainerWithTextField = () => {
   useClearSearchTerm(history, setSearchTerm)
 
   return (
-    <StyledForm onSubmit={handleSubmit}>
+    <StyledForm className="header-search-form" onSubmit={handleSubmit}>
       <SearchBox
+        className="header-search-input"
         placeholder="Search"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <IconTooltip title="Search">
-        <SearchIconContainer>
+        <SearchIconContainer className="header-search-icon-container">
           <StyledIconButton type="submit">
             <SearchIcon />
           </StyledIconButton>

@@ -15,13 +15,13 @@ const RightContainer = () => {
 
   if (isMobileView) {
     return (
-      <StyledRightContainer>
+      <StyledRightContainer data-header-right>
         {isInSearchResultsPage ? <HeaderMoreButton /> : <AvatarButton />}
       </StyledRightContainer>
     )
   } else {
     return (
-      <StyledRightContainer>
+      <StyledRightContainer data-header-right>
         <CreateVideoButton />
         <AppsButton />
         <NotificationsButton />

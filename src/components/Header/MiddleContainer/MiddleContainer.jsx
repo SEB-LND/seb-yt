@@ -65,7 +65,7 @@ const MiddleContainer = () => {
 
   if (isMobileView) {
     return (
-      <StyledMiddleContainer>
+      <StyledMiddleContainer data-header-middle>
         {isInSearchResultsPage ? (
           <MobileSearchTermContainer
             {...{ setIsSearchDrawerOpen, searchTermFromUrl }}
@@ -80,7 +80,7 @@ const MiddleContainer = () => {
     )
   } else {
     return (
-      <StyledMiddleContainer>
+      <StyledMiddleContainer data-header-middle>
         {showSearchBox ? (
           // only show search box with text field >= 657px
           <SearchContainerWithTextField />
