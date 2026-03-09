@@ -21,7 +21,7 @@ function Header() {
     <>
       <HideOnScroll>
         {/* not sure if color=transparent will affect the look when scroll */}
-        <StyledAppBar elevation={isMobileView ? 2 : 0}>
+        <StyledAppBar color="default" elevation={isMobileView ? 2 : 0}>
           <StyledToolbar disableGutters>
             <LeftContainer />
             <MiddleContainer />
@@ -42,6 +42,11 @@ export default Header
 export const StyledAppBar = styled(AppBar)`
   && {
     background-color: white;
+
+    .MuiIconButton-root .MuiSvgIcon-root {
+      font-size: 1.35rem;
+    }
+
     @media screen and (min-width: ${TWO_COL_MIN_WIDTH}px) {
       transition: none !important; // can't override without !important
       opacity: ${HEADER_OPACITY};
@@ -59,8 +64,8 @@ export const StyledAppBar = styled(AppBar)`
 `
 
 const StyledToolbar = styled(Toolbar)`
-  padding-left: 0;
-  padding-right: 0;
+  padding-left: 12px;
+  padding-right: 12px;
   @media screen and (min-width: ${TWO_COL_MIN_WIDTH}px) {
     padding-left: 16px;
     padding-right: 16px;

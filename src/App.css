@@ -34,3 +34,27 @@
     background: none;
   }
 }
+
+/* Header fallback styles to keep first-paint consistent across old/new bundles. */
+#root [title='Sarawak Energy Videos'] {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#root [title='Sarawak Energy Videos'] img[alt='logo'] {
+  width: 60px;
+  height: 20px;
+  display: block;
+  object-fit: contain;
+}
+
+#root header [data-header-right] .MuiAvatar-root,
+#root header [class*='RightContainer__StyledRightContainer'] .MuiAvatar-root {
+  color: #fff;
+  background-color: #ef6c00;
+}
